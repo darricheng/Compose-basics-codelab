@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.MaterialTheme
@@ -60,18 +62,20 @@ fun MyApp(
 @Composable
 private fun Greetings(
     modifier: Modifier = Modifier,
-    names: List<String> = listOf("World", "Compose"),
+    names: List<String> = List(1000) { "$it" },
     backToOnboarding: () -> Unit,
 ) {
-    Column(modifier = modifier.padding(vertical = 4.dp)) {
-        for (name in names) {
-            Greeting(name = name)
-        }
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Button(
             modifier = Modifier.padding(vertical = 24.dp),
             onClick = backToOnboarding
         ) {
             Text("Back to onboarding")
+        }
+        LazyColumn(modifier = modifier.padding(vertical = 4.dp)) {
+            items(items = names) { name ->
+                Greeting(name = name)
+            }
         }
     }
 }
@@ -105,14 +109,6 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     }
 }
 
-@Preview(showBackground = true, widthDp = 320)
-@Composable
-fun GreetingsPreview() {
-    BasicsCodelabTheme {
-        Greetings(backToOnboarding = {})
-    }
-}
-
 @Composable
 fun OnboardingScreen(modifier: Modifier = Modifier, onClick: () -> Unit) {
     Column(
@@ -130,18 +126,26 @@ fun OnboardingScreen(modifier: Modifier = Modifier, onClick: () -> Unit) {
     }
 }
 
-@Preview(showBackground = true, widthDp = 320, heightDp = 320)
-@Composable
-fun OnboardingPreview() {
-    BasicsCodelabTheme {
-        OnboardingScreen(onClick = {})
-    }
-}
-
 @Preview
 @Composable
 fun MyAppPreview() {
     BasicsCodelabTheme {
         MyApp(Modifier.fillMaxSize())
+    }
+}
+
+@Preview(showBackground = true, widthDp = 320)
+@Composable
+fun GreetingsPreview() {
+    BasicsCodelabTheme {
+        Greetings(backToOnboarding = {})
+    }
+}
+
+@Preview(showBackground = true, widthDp = 320, heightDp = 320)
+@Composable
+fun OnboardingPreview() {
+    BasicsCodelabTheme {
+        OnboardingScreen(onClick = {})
     }
 }
