@@ -14,7 +14,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,11 +39,39 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MyApp(
     modifier: Modifier = Modifier,
-    names: List<String> = listOf("World", "Compose")
+) {
+    var shouldShowOnboarding by remember { mutableStateOf(true) }
+    val onContinueClicked: () -> Unit = {
+        shouldShowOnboarding = false
+    }
+    val onBackClicked: () -> Unit = {
+        shouldShowOnboarding = true
+    }
+
+    Surface(modifier) {
+        if (shouldShowOnboarding) {
+            OnboardingScreen(onClick = onContinueClicked)
+        } else {
+            Greetings(backToOnboarding = onBackClicked)
+        }
+    }
+}
+
+@Composable
+private fun Greetings(
+    modifier: Modifier = Modifier,
+    names: List<String> = listOf("World", "Compose"),
+    backToOnboarding: () -> Unit,
 ) {
     Column(modifier = modifier.padding(vertical = 4.dp)) {
         for (name in names) {
             Greeting(name = name)
+        }
+        Button(
+            modifier = Modifier.padding(vertical = 24.dp),
+            onClick = backToOnboarding
+        ) {
+            Text("Back to onboarding")
         }
     }
 }
@@ -80,17 +107,15 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true, widthDp = 320)
 @Composable
-fun AppPreview() {
+fun GreetingsPreview() {
+    val tmp: () -> Unit = {}
     BasicsCodelabTheme {
-        MyApp()
+        Greetings(backToOnboarding = tmp)
     }
 }
 
 @Composable
-fun OnboardingScreen(modifier: Modifier = Modifier) {
-    // TODO: This state should be hoisted
-    var shouldShowOnboarding by remember { mutableStateOf(true) }
-
+fun OnboardingScreen(modifier: Modifier = Modifier, onClick: () -> Unit) {
     Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -99,7 +124,7 @@ fun OnboardingScreen(modifier: Modifier = Modifier) {
         Text("Welcome to the Basics Codelab!")
         Button(
             modifier = Modifier.padding(vertical = 24.dp),
-            onClick = { shouldShowOnboarding = false }
+            onClick = onClick
         ) {
             Text("Continue")
         }
@@ -109,7 +134,16 @@ fun OnboardingScreen(modifier: Modifier = Modifier) {
 @Preview(showBackground = true, widthDp = 320, heightDp = 320)
 @Composable
 fun OnboardingPreview() {
+    val tmp: () -> Unit = {}
     BasicsCodelabTheme {
-        OnboardingScreen()
+        OnboardingScreen(onClick = tmp)
+    }
+}
+
+@Preview
+@Composable
+fun MyAppPreview() {
+    BasicsCodelabTheme {
+        MyApp(Modifier.fillMaxSize())
     }
 }
