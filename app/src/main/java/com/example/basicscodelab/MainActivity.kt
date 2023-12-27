@@ -108,9 +108,8 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Preview(showBackground = true, widthDp = 320)
 @Composable
 fun GreetingsPreview() {
-    val tmp: () -> Unit = {}
     BasicsCodelabTheme {
-        Greetings(backToOnboarding = tmp)
+        Greetings(backToOnboarding = {})
     }
 }
 
@@ -134,9 +133,8 @@ fun OnboardingScreen(modifier: Modifier = Modifier, onClick: () -> Unit) {
 @Preview(showBackground = true, widthDp = 320, heightDp = 320)
 @Composable
 fun OnboardingPreview() {
-    val tmp: () -> Unit = {}
     BasicsCodelabTheme {
-        OnboardingScreen(onClick = tmp)
+        OnboardingScreen(onClick = {})
     }
 }
 
